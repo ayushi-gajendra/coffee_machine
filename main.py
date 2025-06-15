@@ -1,5 +1,7 @@
-profit=0.0
+# ---------------------- Initial Setup ---------------------- #
+profit = 0.0  # Tracks total money earned
 
+# Menu of available drinks with ingredients and cost
 MENU = {
     "espresso": {
         "ingredients": {
@@ -27,65 +29,65 @@ MENU = {
     }
 }
 
+# Available resources in the machine
 resources = {
     "water": 300,
     "milk": 200,
     "coffee": 100,
 }
 
+# ---------------------- Resource Check ---------------------- #
 def check_resources(drink):
-    items=""
-# to check if there are enough resources to make the resp drink
-    for items in MENU[drink]["ingredients"]:
-        if resources[items]<=MENU[drink]["ingredients"][items]:
-            print(f"Sorry there is not enough {items}")
+    """Checks if enough ingredients are available for the selected drink."""
+    for item in MENU[drink]["ingredients"]:
+        if resources[item] < MENU[drink]["ingredients"][item]:
+            print(f"Sorry there is not enough {item}.")
             return False
     return True
 
+# ---------------------- Payment Calculation ---------------------- #
 def calculate_change(cost_of_drink):
+    """Calculates if the user has inserted enough money and returns change if any."""
     print("Please insert coins: ")
-    q= float(input("how many quarters?:"))
-    d = float(input("how many dimes?:"))
-    n = float(input("how many nickles?:"))
-    p = float(input("how many pennies?:"))
+    q = float(input("How many quarters?: "))
+    d = float(input("How many dimes?: "))
+    n = float(input("How many nickles?: "))
+    p = float(input("How many pennies?: "))
 
-    total= (q*0.25) + (d*0.10) + (n*0.05) +(p*0.01)
-    change = round((total - cost_of_drink),2)
+    total = (q * 0.25) + (d * 0.10) + (n * 0.05) + (p * 0.01)
+    change = round((total - cost_of_drink), 2)
 
     if total < cost_of_drink:
         print("Sorry that's not enough money. Money refunded.")
         return False
     else:
-        print(f"Here is ${change}in change.")
+        print(f"Here is ${change} in change.")
         return True
 
-
+# ---------------------- Make Coffee ---------------------- #
 def make_coffee(drink):
-    # we have to subtract amount of ingredients used in the drink from the resources
-    # add the cost of drink to profit
-    #take money, calculate change
-
+    """Deducts used ingredients, updates profit, and serves the drink."""
     global profit
-    resources_sufficient = False
-    resources_sufficient = check_resources(drink)
-    if resources_sufficient:
-        coffee_made = calculate_change(MENU[drink]["cost"])
-        if coffee_made:
-            for items in MENU[drink]["ingredients"]:
-                resources[items]-= MENU[drink]["ingredients"][items]
+    if check_resources(drink):
+        if calculate_change(MENU[drink]["cost"]):
+            for item in MENU[drink]["ingredients"]:
+                resources[item] -= MENU[drink]["ingredients"][item]
             profit += MENU[drink]["cost"]
             print(f"Here is your {drink} ☕️. Enjoy!")
 
-
-is_on=True
+# ---------------------- Main Loop ---------------------- #
+is_on = True
 while is_on:
-    choice = input("What would you like? (espresso/latte/cappuccino):").lower()
-    if choice=="off":
-        is_on=False
-    elif choice=="report":
-        print(f"Water: {resources["water"]}ml\nMilk: {resources["milk"]}ml\nCoffee: {resources["coffee"]}g")
-        print(f"Money:{profit}")
-    elif choice == "espresso" or choice == "latte" or choice == "cappuccino":
+    choice = input("What would you like? (espresso/latte/cappuccino): ").lower()
+
+    if choice == "off":
+        is_on = False
+    elif choice == "report":
+        print(f"Water: {resources['water']}ml")
+        print(f"Milk: {resources['milk']}ml")
+        print(f"Coffee: {resources['coffee']}g")
+        print(f"Money: ${profit}")
+    elif choice in MENU:
         make_coffee(choice)
     else:
-        print("Wrong input. Please re-enter your choice")
+        print("Wrong input. Please re-enter your choice.")
