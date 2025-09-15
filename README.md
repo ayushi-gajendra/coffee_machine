@@ -32,7 +32,19 @@ A terminal-based coffee machine simulation that manages resources, takes payment
 
 ## ▶️ How to Run
 
-**Requirements**: Python 3.7+
+1. Make sure you have **Python 3.7+** installed.  
+2. Clone this repository:  
+```
+git clone https://github.com/ayushi-gajendra/coffee_machine.git
+cd coffee_machine
+```
+3. Run the program:
+```
+python main.py
+```
+---
 
-```bash
-python coffee_machine.py
+⚙️ Project Structure
+coffee_machine/
+├── main.py              # main logic of the simulator
+└── README.md            # this documentation
